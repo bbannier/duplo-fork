@@ -19,6 +19,8 @@
 #include "SourceFile.h"
 #include "HashUtil.h"
 
+#include <locale>
+
 /** 
  * Creates a new text file. The file is accessed relative to current directory.
  */
@@ -28,12 +30,12 @@ SourceLine::SourceLine(std::string& line, int lineNumber){
 
     std::string cleanLine;
 
-	//Remove all white space and noise (tabs etc)
-	for(int i=0;i<(int)line.size();i++){
-		if(line[i] > ' '){
-			cleanLine.push_back(line[i]);
-		}
-	}
+    // Remove all white space and noise (tabs etc)
+    for (unsigned i=0; i<line.size(); i++) {
+      if (not std::isspace(line[i])) {
+        cleanLine.push_back(line[i]);
+      }
+    }
 
     // MD5 hash
     long long* pDigest = (long long*)HashUtil::getMD5Sum((unsigned char*)cleanLine.c_str(), (int)cleanLine.size());
